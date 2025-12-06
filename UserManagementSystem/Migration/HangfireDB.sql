@@ -1,0 +1,411 @@
+﻿USE [master]
+GO
+/****** Object:  Database [HangfireDB]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'HangfireDB')
+BEGIN
+CREATE DATABASE [HangfireDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'HangfireDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\HangfireDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'HangfireDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\HangfireDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+END
+GO
+ALTER DATABASE [HangfireDB] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [HangfireDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [HangfireDB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [HangfireDB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [HangfireDB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [HangfireDB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [HangfireDB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [HangfireDB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [HangfireDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [HangfireDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [HangfireDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [HangfireDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [HangfireDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [HangfireDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [HangfireDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [HangfireDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [HangfireDB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [HangfireDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [HangfireDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [HangfireDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [HangfireDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [HangfireDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [HangfireDB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [HangfireDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [HangfireDB] SET RECOVERY FULL 
+GO
+ALTER DATABASE [HangfireDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [HangfireDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [HangfireDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [HangfireDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [HangfireDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [HangfireDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [HangfireDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'HangfireDB', N'ON'
+GO
+ALTER DATABASE [HangfireDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [HangfireDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [HangfireDB]
+GO
+/****** Object:  Schema [HangFire]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = N'HangFire')
+EXEC sys.sp_executesql N'CREATE SCHEMA [HangFire]'
+GO
+/****** Object:  Table [HangFire].[AggregatedCounter]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[AggregatedCounter]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[AggregatedCounter](
+	[Key] [nvarchar](100) NOT NULL,
+	[Value] [bigint] NOT NULL,
+	[ExpireAt] [datetime] NULL,
+ CONSTRAINT [PK_HangFire_CounterAggregated] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Counter]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Counter]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Counter](
+	[Key] [nvarchar](100) NOT NULL,
+	[Value] [int] NOT NULL,
+	[ExpireAt] [datetime] NULL,
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+ CONSTRAINT [PK_HangFire_Counter] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC,
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Hash]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Hash]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Hash](
+	[Key] [nvarchar](100) NOT NULL,
+	[Field] [nvarchar](100) NOT NULL,
+	[Value] [nvarchar](max) NULL,
+	[ExpireAt] [datetime2](7) NULL,
+ CONSTRAINT [PK_HangFire_Hash] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC,
+	[Field] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = ON, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Job]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Job]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Job](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[StateId] [bigint] NULL,
+	[StateName] [nvarchar](20) NULL,
+	[InvocationData] [nvarchar](max) NOT NULL,
+	[Arguments] [nvarchar](max) NOT NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[ExpireAt] [datetime] NULL,
+ CONSTRAINT [PK_HangFire_Job] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[JobParameter]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[JobParameter]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[JobParameter](
+	[JobId] [bigint] NOT NULL,
+	[Name] [nvarchar](40) NOT NULL,
+	[Value] [nvarchar](max) NULL,
+ CONSTRAINT [PK_HangFire_JobParameter] PRIMARY KEY CLUSTERED 
+(
+	[JobId] ASC,
+	[Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[JobQueue]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[JobQueue]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[JobQueue](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[JobId] [bigint] NOT NULL,
+	[Queue] [nvarchar](50) NOT NULL,
+	[FetchedAt] [datetime] NULL,
+ CONSTRAINT [PK_HangFire_JobQueue] PRIMARY KEY CLUSTERED 
+(
+	[Queue] ASC,
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[List]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[List]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[List](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Key] [nvarchar](100) NOT NULL,
+	[Value] [nvarchar](max) NULL,
+	[ExpireAt] [datetime] NULL,
+ CONSTRAINT [PK_HangFire_List] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC,
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Schema]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Schema]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Schema](
+	[Version] [int] NOT NULL,
+ CONSTRAINT [PK_HangFire_Schema] PRIMARY KEY CLUSTERED 
+(
+	[Version] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Server]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Server]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Server](
+	[Id] [nvarchar](200) NOT NULL,
+	[Data] [nvarchar](max) NULL,
+	[LastHeartbeat] [datetime] NOT NULL,
+ CONSTRAINT [PK_HangFire_Server] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[Set]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[Set]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[Set](
+	[Key] [nvarchar](100) NOT NULL,
+	[Score] [float] NOT NULL,
+	[Value] [nvarchar](256) NOT NULL,
+	[ExpireAt] [datetime] NULL,
+ CONSTRAINT [PK_HangFire_Set] PRIMARY KEY CLUSTERED 
+(
+	[Key] ASC,
+	[Value] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = ON, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+/****** Object:  Table [HangFire].[State]    Script Date: 12/6/2025 11:32:49 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[HangFire].[State]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [HangFire].[State](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[JobId] [bigint] NOT NULL,
+	[Name] [nvarchar](20) NOT NULL,
+	[Reason] [nvarchar](100) NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[Data] [nvarchar](max) NULL,
+ CONSTRAINT [PK_HangFire_State] PRIMARY KEY CLUSTERED 
+(
+	[JobId] ASC,
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+/****** Object:  Index [IX_HangFire_AggregatedCounter_ExpireAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[AggregatedCounter]') AND name = N'IX_HangFire_AggregatedCounter_ExpireAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_AggregatedCounter_ExpireAt] ON [HangFire].[AggregatedCounter]
+(
+	[ExpireAt] ASC
+)
+WHERE ([ExpireAt] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_Hash_ExpireAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Hash]') AND name = N'IX_HangFire_Hash_ExpireAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Hash_ExpireAt] ON [HangFire].[Hash]
+(
+	[ExpireAt] ASC
+)
+WHERE ([ExpireAt] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_Job_ExpireAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Job]') AND name = N'IX_HangFire_Job_ExpireAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Job_ExpireAt] ON [HangFire].[Job]
+(
+	[ExpireAt] ASC
+)
+INCLUDE([StateName]) 
+WHERE ([ExpireAt] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_HangFire_Job_StateName]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Job]') AND name = N'IX_HangFire_Job_StateName')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Job_StateName] ON [HangFire].[Job]
+(
+	[StateName] ASC
+)
+WHERE ([StateName] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_List_ExpireAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[List]') AND name = N'IX_HangFire_List_ExpireAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_List_ExpireAt] ON [HangFire].[List]
+(
+	[ExpireAt] ASC
+)
+WHERE ([ExpireAt] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_Server_LastHeartbeat]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Server]') AND name = N'IX_HangFire_Server_LastHeartbeat')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Server_LastHeartbeat] ON [HangFire].[Server]
+(
+	[LastHeartbeat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_Set_ExpireAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Set]') AND name = N'IX_HangFire_Set_ExpireAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Set_ExpireAt] ON [HangFire].[Set]
+(
+	[ExpireAt] ASC
+)
+WHERE ([ExpireAt] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_HangFire_Set_Score]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[Set]') AND name = N'IX_HangFire_Set_Score')
+CREATE NONCLUSTERED INDEX [IX_HangFire_Set_Score] ON [HangFire].[Set]
+(
+	[Key] ASC,
+	[Score] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_HangFire_State_CreatedAt]    Script Date: 12/6/2025 11:32:49 PM ******/
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[HangFire].[State]') AND name = N'IX_HangFire_State_CreatedAt')
+CREATE NONCLUSTERED INDEX [IX_HangFire_State_CreatedAt] ON [HangFire].[State]
+(
+	[CreatedAt] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[HangFire].[FK_HangFire_JobParameter_Job]') AND parent_object_id = OBJECT_ID(N'[HangFire].[JobParameter]'))
+ALTER TABLE [HangFire].[JobParameter]  WITH CHECK ADD  CONSTRAINT [FK_HangFire_JobParameter_Job] FOREIGN KEY([JobId])
+REFERENCES [HangFire].[Job] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[HangFire].[FK_HangFire_JobParameter_Job]') AND parent_object_id = OBJECT_ID(N'[HangFire].[JobParameter]'))
+ALTER TABLE [HangFire].[JobParameter] CHECK CONSTRAINT [FK_HangFire_JobParameter_Job]
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[HangFire].[FK_HangFire_State_Job]') AND parent_object_id = OBJECT_ID(N'[HangFire].[State]'))
+ALTER TABLE [HangFire].[State]  WITH CHECK ADD  CONSTRAINT [FK_HangFire_State_Job] FOREIGN KEY([JobId])
+REFERENCES [HangFire].[Job] ([Id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[HangFire].[FK_HangFire_State_Job]') AND parent_object_id = OBJECT_ID(N'[HangFire].[State]'))
+ALTER TABLE [HangFire].[State] CHECK CONSTRAINT [FK_HangFire_State_Job]
+GO
+USE [master]
+GO
+ALTER DATABASE [HangfireDB] SET  READ_WRITE 
+GO
