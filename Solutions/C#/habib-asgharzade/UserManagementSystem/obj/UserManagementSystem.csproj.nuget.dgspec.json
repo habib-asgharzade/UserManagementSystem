@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj": {}
+    "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj": {
+    "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
+        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
         "projectName": "UserManagementSystem",
-        "projectPath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
+        "projectPath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\obj\\",
+        "outputPath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

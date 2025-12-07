@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "w2y2bdbICsptTEl94/cv2OVM3TBa3Di64fU+RG4n/C2Vj56tVrMjmRPv6CCFWIfHE3SG55E6Ytmb5SEIDkH/2g==",
+  "dgSpecHash": "Q2FQXU2Mln1jqU0VoxKNuxDpObKWJZHq8sMMA7+m/+ILxyYIkRdL6HwHtFIZrZWDL0t3cGqtzr/RipCmonaXEQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\source\\repos\\User-Document-Background-Processing\\C#\\habib-asgharzade\\habib-asgharzade\\Solutions\\C#\\habib-asgharzade\\UserManagementSystem\\UserManagementSystem.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
