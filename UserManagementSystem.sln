@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementSystem", "UserManagementSystem\UserManagementSystem.csproj", "{CDFB6FF0-76FA-4B0F-884B-75B721F365D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagementSystem", "UserManagementSystem\UserManagementSystem.csproj", "{CDFB6FF0-76FA-4B0F-884B-75B721F365D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solutions", "Solutions", "{09A646FB-DE57-46A9-B47B-F5F64F46AFBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "C#", "C#", "{3D61CB65-B73E-4C44-8DBE-B40AF26D0E1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "habib-asgharzade", "habib-asgharzade", "{8E1BABF4-66EA-4F0F-BFDC-AE08DDFB0D43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +24,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CDFB6FF0-76FA-4B0F-884B-75B721F365D7} = {8E1BABF4-66EA-4F0F-BFDC-AE08DDFB0D43}
+		{3D61CB65-B73E-4C44-8DBE-B40AF26D0E1F} = {09A646FB-DE57-46A9-B47B-F5F64F46AFBF}
+		{8E1BABF4-66EA-4F0F-BFDC-AE08DDFB0D43} = {3D61CB65-B73E-4C44-8DBE-B40AF26D0E1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D494DEE6-12D8-46EF-95BC-4A5B41F8BE1B}
